@@ -26,7 +26,7 @@ class BaseModel(nn.Module):
         best_epoch = [-1] * n_metric
         best_metrics = [1e5 if small else 0 for small in small_better]
         self.to(self.device)
-        self.optimizer = optim.Adagrad(self.parameters(), lr=lr)
+        self.optimizer = optim.Adam(self.parameters(), lr=lr)
         change = False
         for epoch in range(n_epochs):
             avgc = self.fit(train_data, train_task)
