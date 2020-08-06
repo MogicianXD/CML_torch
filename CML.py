@@ -66,7 +66,7 @@ class CML(BaseModel):
         for emb in [self.user_embeddings, self.item_embeddings]:
             nn.init.normal_(emb.weight.data, std=1 / (self.embed_dim ** 0.5))
 
-        if self.features:
+        if self.features is not None:
             self.mlp = nn.Sequential(
                 nn.Linear(self.features.shape[-1], self.hidden_layer_dim),
                 nn.ReLU(),
@@ -74,7 +74,7 @@ class CML(BaseModel):
                 nn.Linear(self.hidden_layer_dim, self.embed_dim)
             )
 
-        if self.features:
+        if self.features is not None:
             self.item_embeddings.weight.data = self._feature_projection()
 
     def _feature_projection(self):
@@ -171,7 +171,7 @@ class CML(BaseModel):
             self.optimizer.zero_grad()
             loss, feature_loss = task(input_batch)
             c.append(loss.item())
-            if self.features:
+            if self.features is not None:
                 loss += feature_loss / self.n_items
             loss.backward()
             self.optimizer.step()
